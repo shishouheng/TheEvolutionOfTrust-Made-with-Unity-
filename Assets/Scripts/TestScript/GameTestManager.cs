@@ -1,33 +1,50 @@
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class GameTestManager : MonoBehaviour
 {
-    public CharacterBase characterA;
-    public CharacterBase characterB;
-    public int rounds = 10;
+	public CharacterBase characterA;
+	private bool aCurrentChoice;
+	public CharacterBase characterB; 
+	private bool bCurrentChoice;
+	public int rounds = 10;
 
-    void Start()
-    {
-        SimulateGame();
-    }
+	public Button newRoundBtn;
 
-    void SimulateGame()
-    {
-        bool lastMoveA = true;
-        bool lastMoveB = true;
+	void Start()
+	{
+		newRoundBtn.onClick.AddListener(SimulateGame);
+	}
 
-        for (int i = 0; i < rounds; i++)
-        {
-            // 每个角色根据对方上次的行为做出决策
-            bool decisionA = characterA.MakeDecision(lastMoveB);
-            bool decisionB = characterB.MakeDecision(lastMoveA);
+	void Rest()
+	{
+	}
 
-            // 输出轮次和行为
-            Debug.Log($"Round {i + 1}: {characterA.characterName} -> {decisionA}, {characterB.characterName} -> {decisionB}");
+	void SimulateGame()
+	{
+		// 初始化首轮行为
+		aCurrentChoice = characterA.firstChoice;
+		bCurrentChoice = characterB.firstChoice;
 
-            // 更新上一轮的行为
-            lastMoveA = decisionA;
-            lastMoveB = decisionB;
-        }
-    }
+		for (int i = 0; i < rounds; i++)
+		{
+			// 输出轮次和行为
+			Debug.Log(
+				$"Round {i + 1}: {characterA.characterName} -> {aCurrentChoice}, {characterB.characterName} -> {bCurrentChoice}");
+
+			// 每个角色根据对方上次的行为做出决策
+			bool aNextChoice = characterA.MakeDecision(bCurrentChoice);
+			bool bNextChoice = characterB.MakeDecision(aCurrentChoice);
+
+			// 更新下回合的行为
+			UpdateNextRountChoice(aNextChoice,bNextChoice);
+		}
+	}
+
+	private void UpdateNextRountChoice(bool decisionA,bool decisionB)
+	{
+		aCurrentChoice = decisionA;
+		bCurrentChoice = decisionB;
+	}
 }

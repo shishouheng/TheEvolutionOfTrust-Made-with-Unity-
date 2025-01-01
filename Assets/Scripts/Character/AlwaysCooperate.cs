@@ -4,12 +4,14 @@ namespace Character
 {
 	public class AlwaysCooperate: CharacterBase
 	{
+		public override bool firstChoice { get; } = true;
+
 		private void Start()
 		{
 			characterName = "小粉帽";
 		}
 
-		public override bool MakeDecision(bool opponentLastMove)
+		public override bool MakeDecision(bool otherLastChoice)
 		{
 			return true;
 		}

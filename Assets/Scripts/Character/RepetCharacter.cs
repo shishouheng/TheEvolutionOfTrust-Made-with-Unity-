@@ -4,6 +4,7 @@ namespace Character
 {
 	public class TitForTat: CharacterBase
 	{
+		public override bool firstChoice { get; } = true;
 		private bool lastOpponentMove = true;
 
 		private void Start()
@@ -11,9 +12,9 @@ namespace Character
 			characterName = "复读机";
 		}
 
-		public override bool MakeDecision(bool opponentLastMove)
+		public override bool MakeDecision(bool otherLastChoice)
 		{
-			lastOpponentMove = opponentLastMove;
+			lastOpponentMove = otherLastChoice;
 			return lastOpponentMove;
 		}
 	}

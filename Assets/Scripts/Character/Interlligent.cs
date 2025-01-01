@@ -9,6 +9,8 @@ namespace Character
 {
 	public class Interlligent: CharacterBase
 	{
+		public override bool firstChoice { get; } = true;
+
 		protected enum InterllignetState
 		{
 			FixedPattern,//前四局固定策略
@@ -19,7 +21,8 @@ namespace Character
 		private InterllignetState mCurrentState=InterllignetState.FixedPattern;
 		
 		//当前游戏轮数
-		private int mCurrentRount;
+		//初始值设置为1是因为第一轮的策略使用的是firstChoice
+		private int mCurrentRount=1;
 		//玩家是否欺骗过
 		private bool mHasPlayerCheat = false;
 		//玩家上一次的行为
@@ -34,12 +37,12 @@ namespace Character
 			characterName = "福尔摩星人";
 		}
 
-		public override bool MakeDecision(bool opponentLastMove)
+		public override bool MakeDecision(bool otherLastChoice)
 		{
 			mCurrentRount++;
-			mLastOpponentMove = opponentLastMove;
+			mLastOpponentMove = otherLastChoice;
 
-			if (!opponentLastMove)
+			if (!otherLastChoice)
 				mHasPlayerCheat = true;
 			
 			//根据当前状态做出决策
